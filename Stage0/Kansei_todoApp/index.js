@@ -8,3 +8,15 @@ const task = {
 	tags: ["Work", "Urgent", "Design"],
 	completed: false,
 };
+
+const dom = {
+	title: document.getElementById("todo-title"),
+	description: document.getElementById("todo-description"),
+	priority: document.getElementById("todo-priority"),
+	status: document.getElementById("todo-status"),
+	dueDate: document.getElementById("todo-due-date"),
+	timeRemaining: document.getElementById("todo-time-remaining"),
+	toggle: document.getElementById("todo-complete-toggle"),
+	editButton: document.getElementById("todo-edit-button"),
+	deleteButton: document.getElementById("todo-delete-button"),
+};
