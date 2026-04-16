@@ -1,4 +1,4 @@
-# Kansei Todo Card - HNG Frontend Stage 1a
+# Kansei Todo Card - HNG Frontend Stage
 
 Kansei (完成) means "complete or done" in Japanese. This project extends the Stage 0 single todo card into a fully interactive, stateful component with modal editing, real-time status synchronization, dynamic time management, and comprehensive accessibility support.
 
@@ -27,7 +27,7 @@ Kansei (完成) means "complete or done" in Japanese. This project extends the S
 
 ## Stage 1a Feature Coverage
 
-### 1. Editing Mode ✅
+### 1. Editing Mode 
 - Edit button opens centered modal dialog with backdrop
 - Form includes title, description, priority dropdown, and due date picker
 - Save button persists changes and closes modal
@@ -36,7 +36,7 @@ Kansei (完成) means "complete or done" in Japanese. This project extends the S
 - Escape key and backdrop click also close modal
 - All form fields have proper label associations
 
-### 2. Status Transitions & Synchronization ✅
+### 2. Status Transitions & Synchronization 
 | Action | Result |
 |--------|--------|
 | Check checkbox | Status becomes "Done"  |
@@ -49,19 +49,19 @@ Visual effects tied to status:
 - **In Progress** - Blue left border accent on card
 - **Done** - Strike-through title + muted colors + opacity reduced
 
-### 3. Priority Indicator Enhancements ✅
+### 3. Priority Indicator Enhancements 
 - Color-coded dot indicator updates based on priority level
 - Badge styling changes with priority
 - Supports Low (green), Medium (orange), High (red)
 
-### 4. Expand/Collapse Behavior ✅
+### 4. Expand/Collapse Behavior 
 - Long descriptions (>130 chars) start collapsed
 - "Show more" / "Show less" toggle with proper wiring
 - `aria-expanded` updates to true/false
 - `aria-controls` links toggle to collapsible section
 - Keyboard accessible (Tab + Space/Enter)
 
-### 5. Time Management Enhancements ✅
+### 5. Time Management Enhancements 
 - Displays time in granular units: days, hours, minutes
 - Updates every 30 seconds
 - Overdue state shows explicit red badge and updates color
@@ -127,22 +127,6 @@ Enforced tab order (tabindex):
 
 ---
 
-## Responsiveness
-
-### Breakpoints
-- **320px** - Mobile: Single-column layout, modal adjusts width
-- **768px** - Tablet: Form fields stack vertically, controls reflow
-- **1024px+** - Desktop: Full horizontal layout, modal centered
-
-### Responsive Behavior
-- Modal width: `min(100%, 520px)` on desktop, `min(100%, calc(100% - 2rem))` on mobile
-- Form row: 2 columns on desktop, 1 column on mobile
-- FAB button: 56px on desktop, 52px on mobile
-- Status and action controls reflow to prevent overlap
-- Long content (title, description, tags) wraps gracefully without overflow
-
----
-
 ## Known Limitations
 
 1. **Add Task Button** - Currently shows placeholder alert. Full multi-task flow is Stage 2+
@@ -153,79 +137,9 @@ Enforced tab order (tabindex):
 
 ---
 
-## Test IDs Reference
-
-### Stage 0 (Preserved)
-- `test-todo-card` - Main card container
-- `test-todo-title` - Task title
-- `test-todo-description` - Task description
-- `test-todo-priority` - Priority badge
-- `test-todo-status` - Status text display
-- `test-todo-due-date` - Due date
-- `test-todo-time-remaining` - Time remaining text
-- `test-todo-complete-toggle` - Checkbox
-- `test-todo-tags` - Tag list container
-- `test-todo-tag-*` - Individual tags
-- `test-todo-edit-button` - Edit button
-- `test-todo-delete-button` - Delete button
-- `test-todo-add-tasks` - Add task button
-
-### Stage 1a (New)
-- `test-todo-status-control` - Status dropdown
-- `test-todo-priority-indicator` - Priority dot
-- `test-todo-expand-toggle` - Show more/less toggle
-- `test-todo-collapsible-section` - Collapsible description container
-- `test-todo-overdue-indicator` - Overdue badge
-- `test-todo-edit-form` - Edit form container (in modal)
-- `test-todo-edit-title-input` - Title input
-- `test-todo-edit-description-input` - Description textarea
-- `test-todo-edit-priority-select` - Priority select
-- `test-todo-edit-due-date-input` - Due date input
-- `test-todo-save-button` - Save button
-- `test-todo-cancel-button` - Cancel button
-
----
-
 ## Getting Started
 
 1. **Clone/open** the repository
 2. **Open** `index.html` in your browser (or use Live Server)
 3. **No setup required** - vanilla HTML/CSS/JS only
-
-### Testing the Features
-- Click **Edit** to open modal, change any field, click Save
-- Change **Status** dropdown to see instant sync with checkbox
-- Click **Checkbox** to see status change to Done
-- Make description longer, click **Show more** to expand
-- Wait for due date to pass to see **Overdue** styling
-- Press **Escape** or click backdrop to close modal
-
 ---
-
-## Browser Compatibility
-
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-Date picker (`<input type="datetime-local">`) is fully supported in all modern browsers.
-
----
-
-## Submission Checklist
-
-✅ All Stage 0 test IDs present  
-✅ All Stage 1a test IDs present and functional  
-✅ Edit mode fully functional with modal  
-✅ Status transitions synchronized  
-✅ Expand/collapse accessible with ARIA  
-✅ Overdue logic correct with badge and visual style  
-✅ No visual overflow at any screen size  
-✅ Keyboard fully usable with enforced tab order  
-✅ Time updates properly (granular + stops at Done)  
-✅ Clean state management  
-✅ Accessibility fully implemented  
-✅ Responsive at all breakpoints  
-✅ No build tools or dependencies  
-✅ README updated with all required information
