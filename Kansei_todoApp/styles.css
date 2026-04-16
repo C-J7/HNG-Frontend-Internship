@@ -131,6 +131,12 @@ button {
 	color: var(--danger);
 }
 
+#todo-add-tasks{
+	position: fixed;
+	left: 1.5rem;
+	bottom: 1.5rem;
+}
+
 button:focus-visible,
 input:focus-visible {
 	outline: 3px solid var(--focus);
