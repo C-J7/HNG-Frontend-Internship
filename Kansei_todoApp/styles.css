@@ -160,6 +160,75 @@ input:focus-visible {
 	border: 0;
 }
 
+.hidden {
+	display: none !important;
+}
+
+.is-editing .todo-card-header,
+.is-editing #todo-title,
+.is-editing .description-ctn,
+.is-editing .tag-list, 
+.is-editing .todo-card-meta,
+.is-editing .todo-card-actions {
+	display: none;
+}
+.is-editing #todo-edit-form {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+/* Expand / Collapse Behavior */
+.collapsible-section { overflow: hidden; transition: max-height 0.3s ease; }
+.collapsible-section.is-collapsed { max-height: 48px; } /* Adjust based on your text size */
+#todo-expand-toggle {
+    background: none; border: none; color: var(--focus); 
+    font-size: 0.85rem; padding: 0; text-decoration: underline; 
+    margin-bottom: 0.5rem; outline-offset: 4px;
+}
+
+
+/* Status & Priority Visuals */
+.todo-card.status-in-progress { border-left: 4px solid var(--focus); }
+.todo-card.status-done { opacity: 0.75; }
+.todo-card.status-done #todo-title { text-decoration: line-through; color: var(--muted); }
+
+
+.priority-wrap { display: flex; align-items: center; gap: 0.5rem; }
+.priority-indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.priority-indicator.high { background-color: var(--danger); }
+.priority-indicator.medium { background-color: #e6a23c; } /* Orange */
+.priority-indicator.low { background-color: #67c23a; } /* Green */
+
+
+.status-select { padding: 0.25rem 0.5rem; border-radius: 4px; border: 1px solid var(--line); font-size: 0.85rem; }
+
+
+/* Time & Overdue */
+.overdue-badge { color: var(--danger); font-weight: bold; border: 1px solid var(--danger); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.8rem; }
+.time-container.is-overdue #todo-time-remaining { color: var(--danger); font-weight: bold; }
+
+
+/* Edit Form Styling */
+.form-group { display: flex; flex-direction: column; gap: 0.3rem; }
+.form-group label { font-size: 0.85rem; font-weight: 600; }
+.form-group input, .form-group select, .form-group textarea {
+    padding: 0.6rem; border: 1px solid var(--line); border-radius: 6px; font-family: inherit;
+}
+.form-row { display: flex; gap: 1rem; }
+.form-row .form-group { flex: 1; }
+.edit-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem; }
+.primary-btn { background: var(--focus); color: white; border-color: var(--focus); }
+
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .form-row { flex-direction: column; }
+}
+
+
+
+
 @media (max-width: 768px) {
 	.app-shell {
 		grid-template-columns: 1fr;
