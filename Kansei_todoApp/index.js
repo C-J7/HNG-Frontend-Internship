@@ -1,184 +1,339 @@
+const TASK_STATUSES = ["Pending", "In Progress", "Done"];
+const PRIORITIES = ["Low", "Medium", "High"];
+const COLLAPSE_THRESHOLD = 130;
+const UPDATE_INTERVAL_MS = 30000;
 
 const task = {
-    id: "kansei-stage-0",
-    title: "Submit Stage 0 FE Task",
-    description: "Finish the Kansei todo card implementation and record the explainer video. Ensuring it meets all accessibility standards and looks pixel-perfect across devices.",
+    id: "kansei-stage-1a",
+    title: "Submit Stage 1a Task",
+    description:
+        "Finish the Kansei todo card implementation and polish Stage 1a interactions so status logic, editing, time updates, and accessibility behavior all remain in sync across desktop and mobile.",
     priority: "High",
-    status: "Pending", // "Pending", "In Progress", "Done"
-    dueDate: new Date("2026-04-16T12:00:00.000Z"),
+    status: "Pending",
+    dueDate: new Date("2026-04-18T12:00:00.000Z"),
     tags: ["Work", "Urgent", "Design"],
-    
-    //UI States
-    isEditing: false,
-    isCollapsed: true
 };
 
+const uiState = {
+    isEditing: false,
+    isExpanded: false,
+};
+
+let timerId = null;
 
 const dom = {
-    card: document.querySelector('[data-testid="test-todo-card"]'),
+    card: document.getElementById("todo-card"),
     title: document.getElementById("todo-title"),
     description: document.getElementById("todo-description"),
     priority: document.getElementById("todo-priority"),
     priorityIndicator: document.getElementById("todo-priority-indicator"),
     statusText: document.getElementById("todo-status"),
-    statusSelect: document.getElementById("todo-status-control"),
+    statusControl: document.getElementById("todo-status-control"),
     dueDate: document.getElementById("todo-due-date"),
     timeRemaining: document.getElementById("todo-time-remaining"),
     timeContainer: document.getElementById("todo-time-container"),
     overdueIndicator: document.getElementById("todo-overdue-indicator"),
     completeToggle: document.getElementById("todo-complete-toggle"),
-    
-    expandBtn: document.getElementById("todo-expand-toggle"),
-    collapseSection: document.getElementById("todo-collapsible-section"),
-    
-    // Edit Form Elements
-    editBtn: document.getElementById("todo-edit-button"),
+    expandToggle: document.getElementById("todo-expand-toggle"),
+    collapsible: document.getElementById("todo-collapsible-section"),
+    editButton: document.getElementById("todo-edit-button"),
+    deleteButton: document.getElementById("todo-delete-button"),
+    modal: document.getElementById("edit-modal"),
+    modalBackdrop: document.querySelector(".edit-modal-backdrop"),
+    modalCloseButton: document.getElementById("modal-close-button"),
     form: document.getElementById("todo-edit-form"),
-    editTitle: document.getElementById("edit-title"),
-    editDesc: document.getElementById("edit-description"),
-    editPriority: document.getElementById("edit-priority"),
-    editDueDate: document.getElementById("edit-due-date"),
-    cancelBtn: document.getElementById("todo-cancel-button"),
+    formTitle: document.getElementById("todo-edit-title-input"),
+    formDescription: document.getElementById("todo-edit-description-input"),
+    formPriority: document.getElementById("todo-edit-priority-select"),
+    formDueDate: document.getElementById("todo-edit-due-date-input"),
+    cancelButton: document.getElementById("todo-cancel-button"),
+    addButton: document.getElementById("todo-add-tasks"),
 };
 
-// Utility Functions
 function formatDueDate(date) {
-    return `Due ${date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
+    return `Due ${date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    })}`;
 }
 
-function updateTimeDisplay() {
+function pluralize(value, singular, plural) {
+    return `${value} ${value === 1 ? singular : plural}`;
+}
+
+function getTimeDifferenceText(targetDate, now = new Date()) {
+    const diffMs = targetDate.getTime() - now.getTime();
+    const absMs = Math.abs(diffMs);
+    const minute = 60 * 1000;
+    const hour = 60 * minute;
+    const day = 24 * hour;
+
+    if (absMs < minute) {
+        return {
+            isOverdue: diffMs < 0,
+            text: diffMs < 0 ? "Overdue by 1 minute" : "Due in 1 minute",
+        };
+    }
+
+    if (absMs < hour) {
+        const minutes = Math.round(absMs / minute);
+        return {
+            isOverdue: diffMs < 0,
+            text: `${diffMs < 0 ? "Overdue by" : "Due in"} ${pluralize(minutes, "minute", "minutes")}`,
+        };
+    }
+
+    if (absMs < day) {
+        const hours = Math.round(absMs / hour);
+        return {
+            isOverdue: diffMs < 0,
+            text: `${diffMs < 0 ? "Overdue by" : "Due in"} ${pluralize(hours, "hour", "hours")}`,
+        };
+    }
+
+    const days = Math.round(absMs / day);
+    return {
+        isOverdue: diffMs < 0,
+        text: `${diffMs < 0 ? "Overdue by" : "Due in"} ${pluralize(days, "day", "days")}`,
+    };
+}
+
+function shouldCollapseDescription() {
+    return task.description.trim().length > COLLAPSE_THRESHOLD;
+}
+
+function getCardStatusClass() {
+    return `status-${task.status.toLowerCase().replace(/\s+/g, "-")}`;
+}
+
+function getPriorityClass() {
+    return `priority-${task.priority.toLowerCase()}`;
+}
+
+function renderPriority() {
+    dom.priority.textContent = task.priority;
+    dom.priority.classList.remove("priority-low", "priority-medium", "priority-high");
+    dom.priority.classList.add(getPriorityClass());
+
+    dom.priorityIndicator.className = `priority-indicator ${task.priority.toLowerCase()}`;
+}
+
+function renderStatus() {
+    dom.statusText.textContent = task.status;
+    dom.statusControl.value = task.status;
+    dom.completeToggle.checked = task.status === "Done";
+
+    dom.card.classList.remove("status-pending", "status-in-progress", "status-done", "status-overdue");
+    dom.card.classList.add(getCardStatusClass());
+
+    dom.title.classList.toggle("is-completed", task.status === "Done");
+}
+
+function renderDescription() {
+    dom.description.textContent = task.description;
+
+    const collapsibleNeeded = shouldCollapseDescription();
+    dom.expandToggle.classList.toggle("hidden", !collapsibleNeeded);
+
+    if (!collapsibleNeeded) {
+        uiState.isExpanded = true;
+    }
+
+    const shouldBeCollapsed = collapsibleNeeded && !uiState.isExpanded;
+    dom.collapsible.classList.toggle("is-collapsed", shouldBeCollapsed);
+    dom.expandToggle.setAttribute("aria-expanded", String(!shouldBeCollapsed));
+    dom.expandToggle.textContent = shouldBeCollapsed ? "Show more" : "Show less";
+}
+
+function renderDueDate() {
+    dom.dueDate.textContent = formatDueDate(task.dueDate);
+    dom.dueDate.setAttribute("datetime", task.dueDate.toISOString());
+}
+
+function renderTimeState() {
     if (task.status === "Done") {
         dom.timeRemaining.textContent = "Completed";
-        dom.timeContainer.classList.remove("is-overdue");
         dom.overdueIndicator.classList.add("hidden");
+        dom.timeContainer.classList.remove("is-overdue");
+        dom.card.classList.remove("status-overdue");
         return;
     }
 
-    const now = new Date();
-    const diffMs = task.dueDate.getTime() - now.getTime();
-    const isOverdue = diffMs < 0;
-    const absMs = Math.abs(diffMs);
+    const timeState = getTimeDifferenceText(task.dueDate);
+    dom.timeRemaining.textContent = timeState.text;
+    dom.overdueIndicator.classList.toggle("hidden", !timeState.isOverdue);
+    dom.timeContainer.classList.toggle("is-overdue", timeState.isOverdue);
 
-    const minutes = Math.floor(absMs / (1000 * 60));
-    const hours = Math.floor(absMs / (1000 * 60 * 60));
-    const days = Math.floor(absMs / (1000 * 60 * 60 * 24));
-
-    let timeText = "";
-    if (days > 0) timeText = `${days} day${days > 1 ? 's' : ''}`;
-    else if (hours > 0) timeText = `${hours} hour${hours > 1 ? 's' : ''}`;
-    else timeText = `${minutes} minute${minutes !== 1 ? 's' : ''}`;
-
-    if (isOverdue) {
-        dom.timeRemaining.textContent = `Overdue by ${timeText}`;
-        dom.timeContainer.classList.add("is-overdue");
-        dom.overdueIndicator.classList.remove("hidden");
-    } else {
-        dom.timeRemaining.textContent = `Due in ${timeText}`;
-        dom.timeContainer.classList.remove("is-overdue");
-        dom.overdueIndicator.classList.add("hidden");
+    if (timeState.isOverdue) {
+        dom.card.classList.add("status-overdue");
+    } else if (dom.card.classList.contains("status-overdue")) {
+        dom.card.classList.remove("status-overdue");
     }
 }
 
-//The Render Loop
-function renderTask() {
-    
-    dom.title.textContent = task.title;
-    dom.description.textContent = task.description;
-    dom.priority.textContent = task.priority;
-    dom.statusText.textContent = task.status;
-    dom.dueDate.textContent = formatDueDate(task.dueDate);
-    dom.dueDate.setAttribute("datetime", task.dueDate.toISOString());
+function renderEditMode() {
+    dom.modal.classList.toggle("hidden", !uiState.isEditing);
+    dom.modal.setAttribute("aria-hidden", String(!uiState.isEditing));
 
-    dom.priorityIndicator.className = `priority-indicator ${task.priority.toLowerCase()}`;
-    
-    dom.statusSelect.value = task.status;
-    dom.completeToggle.checked = task.status === "Done";
-    
-    // Visual Status Classes
-    dom.card.className = `todo-card status-${task.status.toLowerCase().replace(" ", "-")}`;
+    if (uiState.isEditing) {
+        dom.formTitle.value = task.title;
+        dom.formDescription.value = task.description;
+        dom.formPriority.value = task.priority;
+        dom.formDueDate.value = new Date(task.dueDate.getTime() - task.dueDate.getTimezoneOffset() * 60000)
+            .toISOString()
+            .slice(0, 16);
 
-    // Expand/Collapse View
-    if (task.isCollapsed) {
-        dom.collapseSection.classList.add("is-collapsed");
-        dom.expandBtn.textContent = "Show more";
-        dom.expandBtn.setAttribute("aria-expanded", "false");
-    } else {
-        dom.collapseSection.classList.remove("is-collapsed");
-        dom.expandBtn.textContent = "Show less";
-        dom.expandBtn.setAttribute("aria-expanded", "true");
+        setTimeout(() => {
+            dom.formTitle.focus();
+        }, 100);
+    }
+}
+
+function startTimer() {
+    if (timerId !== null) {
+        clearInterval(timerId);
+        timerId = null;
     }
 
-    // Edit Mode View
-    if (task.isEditing) {
-        dom.card.classList.add("is-editing");
-        dom.form.classList.remove("hidden");
-        dom.form.setAttribute("aria-hidden", "false");
-        
-        dom.editTitle.value = task.title;
-        dom.editDesc.value = task.description;
-        dom.editPriority.value = task.priority;
-        dom.editDueDate.value = task.dueDate.toISOString().slice(0, 16);
-    } else {
-        dom.card.classList.remove("is-editing");
-        dom.form.classList.add("hidden");
-        dom.form.setAttribute("aria-hidden", "true");
-        dom.editBtn.focus(); 
+    if (task.status === "Done") {
+        return;
     }
 
-    updateTimeDisplay();
+    timerId = setInterval(() => {
+        renderTimeState();
+    }, UPDATE_INTERVAL_MS);
+}
+
+function setStatus(nextStatus) {
+    if (!TASK_STATUSES.includes(nextStatus)) {
+        return;
+    }
+
+    task.status = nextStatus;
+    renderStatus();
+    renderTimeState();
+    startTimer();
+}
+
+function setCompleted(isCompleted) {
+    if (isCompleted) {
+        setStatus("Done");
+        return;
+    }
+
+    if (task.status === "Done") {
+        setStatus("Pending");
+    }
+}
+
+function openEditMode() {
+    uiState.isEditing = true;
+    renderEditMode();
+}
+
+function closeEditMode() {
+    uiState.isEditing = false;
+    renderEditMode();
+    dom.editButton.focus();
+}
+
+function saveEdits() {
+    const nextTitle = dom.formTitle.value.trim();
+    const nextDescription = dom.formDescription.value.trim();
+    const nextPriority = dom.formPriority.value;
+    const nextDueDateRaw = dom.formDueDate.value;
+
+    if (!nextTitle || !nextDescription || !PRIORITIES.includes(nextPriority) || !nextDueDateRaw) {
+        return;
+    }
+
+    const nextDueDate = new Date(nextDueDateRaw);
+    if (Number.isNaN(nextDueDate.getTime())) {
+        return;
+    }
+
+    task.title = nextTitle;
+    task.description = nextDescription;
+    task.priority = nextPriority;
+    task.dueDate = nextDueDate;
+
+    if (!shouldCollapseDescription()) {
+        uiState.isExpanded = true;
+    }
+
+    renderAll();
+    closeEditMode();
+}
+
+function handleDelete() {
+    window.alert("Delete clicked");
 }
 
 function bindEvents() {
-    dom.completeToggle.addEventListener("change", (e) => {
-        task.status = e.target.checked ? "Done" : "Pending";
-        renderTask();
+    dom.completeToggle.addEventListener("change", (event) => {
+        setCompleted(event.target.checked);
     });
 
-    // Dropdown Status Change
-    dom.statusSelect.addEventListener("change", (e) => {
-        task.status = e.target.value;
-        renderTask();
+    dom.statusControl.addEventListener("change", (event) => {
+        setStatus(event.target.value);
     });
 
-    // Expand Toggle
-    dom.expandBtn.addEventListener("click", () => {
-        task.isCollapsed = !task.isCollapsed;
-        renderTask();
+    dom.expandToggle.addEventListener("click", () => {
+        uiState.isExpanded = !uiState.isExpanded;
+        renderDescription();
     });
 
-    // Open Edit Mode
-    dom.editBtn.addEventListener("click", () => {
-        task.isEditing = true;
-        renderTask();
+    dom.editButton.addEventListener("click", openEditMode);
+
+    dom.cancelButton.addEventListener("click", () => {
+        closeEditMode();
     });
 
-    // Cancel Edit Mode
-    dom.cancelBtn.addEventListener("click", () => {
-        task.isEditing = false;
-        renderTask();
+    dom.modalCloseButton.addEventListener("click", () => {
+        closeEditMode();
     });
 
-    // Save Edit Form
-    dom.form.addEventListener("submit", (e) => {
-        e.preventDefault(); // Prevent page reload
-        task.title = dom.editTitle.value;
-        task.description = dom.editDesc.value;
-        task.priority = dom.editPriority.value;
-        task.dueDate = new Date(dom.editDueDate.value);
-        task.isEditing = false;
-        renderTask();
+    dom.modalBackdrop.addEventListener("click", () => {
+        closeEditMode();
     });
+
+    dom.form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        saveEdits();
+    });
+
+    dom.deleteButton.addEventListener("click", handleDelete);
+
+    // Close Form on Escape key
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && uiState.isEditing) {
+            closeEditMode();
+        }
+    });
+
+    if (dom.addButton) {
+        dom.addButton.addEventListener("click", () => {
+            window.alert("Add task flow is not part of Stage 1 scope.");
+        });
+    }
+}
+
+function renderAll() {
+    dom.title.textContent = task.title;
+    renderPriority();
+    renderStatus();
+    renderDescription();
+    renderDueDate();
+    renderTimeState();
+    renderEditMode();
 }
 
 function initTodoCard() {
-    renderTask();
+    uiState.isExpanded = !shouldCollapseDescription();
     bindEvents();
-
-    setInterval(() => {
-        if (task.status !== "Done") {
-            updateTimeDisplay();
-        }
-    }, 30000);
+    renderAll();
+    startTimer();
 }
 
 initTodoCard();

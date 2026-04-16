@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -6,121 +7,151 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <main class="main-content">
+        <section aria-labelledby="active-task-heading" class="content-area">
+            <p class="section-kicker">THE ACT OF COMPLETION</p>
+            <h1 id="active-task-heading">Active Task</h1>
 
-        <main class="main-content">
-
-            <section aria-labelledby="active-task-heading" class="content-area">
-                <p class="section-kicker">THE ACT OF COMPLETION</p>
-                <h2 id="active-task-heading">Active Task</h2>
-
-                <article data-testid="test-todo-card" class="todo-card" aria-label="Todo task card">
-                    <header class="todo-card-header">
-                        <div class="priority-wrapper">   
-                            <span data-testid="test-todo-priority-indicator" id="todo-priority-indicator" class="priority-indicator"></span>
-                            <span data-testid="test-todo-priority" id="todo-priority" class="badge priority" aria-label="Task priority">High</span>
-                        </div>
-                        <div class="status-wrap">
-                            <label for="todo-status-control" class="sr-only">Task status</label>
-                            <select data-testid="test-todo-status" id="todo-status" class="status" aria-label="Task status">
-                                <option value="Pending">Pending</option>
-                                <option value="In Progress">In Progress</option>
-                                <option value="Done">Done</option>
-                            </select>
-                            <span data-testid="test-todo-status" id="todo-status" class="status sr-only">Pending</span>
-                        </div>
-                    </header>
-
-                    <h2 data-testid="test-todo-title" id="todo-title">Submit Stage 0 FE Task</h2>
-
-                        <div class="description-ctn">
-                            <button data-testid="test-todo-expand-toggle" id="todo-expand-toggle" aria-expanded="false" aria-controls="todo-collapsible-section">
-                                Show more
-                            </button>
-                            <div data-testid="test-todo-collapsible-section" id="todo-collapsible-section" class="collapsible-section is-collapsed"
-                            <p data-testid="test-todo-description" id="todo-description">
-                                Finish the Kansei todo card implementation and record the explainer video.
-                            </p>
-                            </div>
-                        </div>
-
-                    <ul data-testid="test-todo-tags" id="todo-tags" role="list" class="tag-list" aria-label="Task tags">
-                        <li data-testid="test-todo-tag-work" class="tag">Work</li>
-                        <li data-testid="test-todo-tag-urgent" class="tag">Urgent</li>
-                        <li class="tag">Design</li>
-                    </ul>
-
-                    <div class="todo-card-meta">
-                        <p>
-                            <strong>Deadline:</strong>
-                            <time data-testid="test-todo-due-date" id="todo-due-date" datetime="2026-04-16T12:00:00.000Z">Due Apr 16, 2026</time>
-                        </p>
-                        <p aria-live="polite" class="time-container" id="todo-time-container">
-                            <strong>Time remaining:</strong>
-                            <span data-testid="test-todo-overdue-indicator" id="todo-overdue-indicator" class="overdue-badge hidden">Overdue</span>
-                            <time data-testid="test-todo-time-remaining" id="todo-time-remaining">Due in 3 days</time>
-                        </p>
+            <article data-testid="test-todo-card" id="todo-card" class="todo-card status-pending priority-high" aria-label="Todo task card">
+                <header class="todo-card-header">
+                    <div class="priority-wrap">
+                        <span data-testid="test-todo-priority-indicator" id="todo-priority-indicator" class="priority-indicator" aria-hidden="true"></span>
+                        <span data-testid="test-todo-priority" id="todo-priority" class="badge priority" aria-label="Task priority">High</span>
                     </div>
 
-                    <!-- Edit Form -->
-                    <form data-testid="test-todo-edit-form" id="todo-edit-form" class="edit-form hidden" aria-hidden="true">
-                        <div class="form-group">
-                            <label for="edit-title">Title</label>
-                            <input data-testid="test-todo-edit-title-input" id="edit-title" type="text" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-description">Description</label>
-                            <textarea data-testid="test-todo-edit-description-input" id="edit-description" rows="3"></textarea>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="edit-priority">Priority</label>
-                                <select data-testid="test-todo-edit-priority-select" id="edit-priority">
-                                    <option value="Low">Low</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="High">High</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="edit-due-date">Due Date</label>
-                                <input data-testid="test-todo-edit-due-date-input" id="edit-due-date" type="datetime-local" required>
-                            </div>
-                        </div>
-                        <div class="edit-actions">
-                            <button data-testid="test-todo-cancel-button" id="todo-cancel-button" type="button">Cancel</button>
-                            <button data-testid="test-todo-save-button" id="todo-save-button" type="submit" class="primary-btn">Save</button>
-                        </div>
-                    </form>
+                    <div class="status-wrap">
+                        <span data-testid="test-todo-status" id="todo-status" class="status" aria-label="Task status">Pending</span>
+                    </div>
+                </header>
 
-                        <footer class="todo-card-actions">
-                        <div class="todo-complete-wrap">
-                            <input
-                                data-testid="test-todo-complete-toggle"
-                                id="todo-complete-toggle"
-                                type="checkbox"
-                                aria-label="Mark task as complete"
-                            />
-                            <label for="todo-complete-toggle">Completed</label>
-                        </div>
+                <h2 data-testid="test-todo-title" id="todo-title">Submit Stage 1a Task</h2>
 
-                        <div class="action-buttons">
-                            <button data-testid="test-todo-edit-button" id="todo-edit-button" type="button" aria-label="Edit task">
-                                Edit
-                            </button>
-                            <button data-testid="test-todo-delete-button" id="todo-delete-button" type="button" aria-label="Delete task">
-                                Delete
-                            </button>
-                        </div>
-                    </footer>
-                </article>
-            </section>
-        </main>
-        <button data-testid="test-todo-add-tasks" id="todo-add-tasks" type="button" aria-label="Add new task">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-        </button>
+                <div class="description-ctn">
+                    <button
+                        data-testid="test-todo-expand-toggle"
+                        id="todo-expand-toggle"
+                        class="expand-toggle"
+                        type="button"
+                        tabindex="3"
+                        aria-expanded="false"
+                        aria-controls="todo-collapsible-section"
+                    >
+                        Show more
+                    </button>
+                    <div
+                        data-testid="test-todo-collapsible-section"
+                        id="todo-collapsible-section"
+                        class="collapsible-section is-collapsed"
+                    >
+                        <p data-testid="test-todo-description" id="todo-description">
+                            Finish the Kansei todo card implementation and polish Stage 1a interactions so status logic, editing, time updates,
+                            and accessibility behavior all remain in sync across desktop and mobile.
+                        </p>
+                    </div>
+                </div>
+
+                <ul data-testid="test-todo-tags" id="todo-tags" role="list" class="tag-list" aria-label="Task tags">
+                    <li data-testid="test-todo-tag-work" class="tag">Work</li>
+                    <li data-testid="test-todo-tag-urgent" class="tag">Urgent</li>
+                    <li class="tag">Design</li>
+                </ul>
+
+                <div class="todo-card-meta">
+                    <p>
+                        <strong>Deadline:</strong>
+                        <time data-testid="test-todo-due-date" id="todo-due-date" datetime="2026-04-16T12:00:00.000Z">Due Apr 16, 2026</time>
+                    </p>
+                    <p aria-live="polite" class="time-container" id="todo-time-container">
+                        <strong>Time remaining:</strong>
+                        <span data-testid="test-todo-overdue-indicator" id="todo-overdue-indicator" class="overdue-badge hidden">Overdue</span>
+                        <time data-testid="test-todo-time-remaining" id="todo-time-remaining">Due in 2 days</time>
+                    </p>
+                </div>
+
+                <footer class="todo-card-actions" aria-label="Task actions">
+                    <div class="todo-complete-wrap">
+                        <input
+                            data-testid="test-todo-complete-toggle"
+                            id="todo-complete-toggle"
+                            type="checkbox"
+                            tabindex="1"
+                            aria-label="Mark task as complete"
+                        >
+                        <label for="todo-complete-toggle">Completed</label>
+                    </div>
+
+                    <div class="status-control-wrap">
+                        <label for="todo-status-control">Status</label>
+                        <select data-testid="test-todo-status-control" id="todo-status-control" class="status-control" tabindex="2" aria-label="Status control">
+                            <option value="Pending">Pending</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Done">Done</option>
+                        </select>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button data-testid="test-todo-edit-button" id="todo-edit-button" type="button" tabindex="4" aria-label="Edit task">
+                            Edit
+                        </button>
+                        <button data-testid="test-todo-delete-button" id="todo-delete-button" type="button" tabindex="5" aria-label="Delete task">
+                            Delete
+                        </button>
+                    </div>
+                </footer>
+            </article>
+        </section>
+    </main>
+
+    <!-- Edit Section -->
+    <div id="edit-modal" class="edit-modal hidden" role="dialog" aria-labelledby="edit-modal-title" aria-hidden="true">
+        <div class="edit-modal-backdrop"></div>
+        <div class="edit-modal-content">
+            <div class="edit-modal-header">
+                <h2 id="edit-modal-title">Edit Task</h2>
+                <button id="modal-close-button" class="modal-close-btn" type="button" aria-label="Close edit modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <form data-testid="test-todo-edit-form" id="todo-edit-form" class="edit-form-modal">
+                <div class="form-group">
+                    <label for="todo-edit-title-input">Title</label>
+                    <input data-testid="test-todo-edit-title-input" id="todo-edit-title-input" type="text" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="todo-edit-description-input">Description</label>
+                    <textarea data-testid="test-todo-edit-description-input" id="todo-edit-description-input" rows="4" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="todo-edit-priority-select">Priority</label>
+                        <select data-testid="test-todo-edit-priority-select" id="todo-edit-priority-select">
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="todo-edit-due-date-input">Due Date</label>
+                        <input data-testid="test-todo-edit-due-date-input" id="todo-edit-due-date-input" type="datetime-local" required>
+                    </div>
+                </div>
+
+                <div class="edit-actions">
+                    <button data-testid="test-todo-cancel-button" id="todo-cancel-button" type="button">Cancel</button>
+                    <button data-testid="test-todo-save-button" id="todo-save-button" class="primary-btn" type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <button data-testid="test-todo-add-tasks" id="todo-add-tasks" class="fab-add-task" type="button" aria-label="Add new task">
+        <span aria-hidden="true">+</span>
+    </button>
+
     <script src="index.js"></script>
 </body>
-
 </html>
