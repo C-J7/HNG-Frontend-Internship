@@ -17,8 +17,59 @@
                 <h2 class="profile-card__name" data-testid="test-user-name">Bamgbose Christian</h2>
                 <p class="profile-card__role" data-testid="test-user-role">Software Engineer · System Analyst · Accessibility-first thinker</p>
             </header>
-            
+
+            <figure class="profile-card__figure" data-testid="test-user-avatar-figure">
+                <img
+                    class="profile-card__avatar"
+                    data-testid="test-user-avatar"
+                    alt="Portrait illustration of Jordan Okafor, the DigiCard profile owner"
+                    width="160"
+                    height="160"
+                >
+                <figcaption class="profile-card__caption" data-testid="test-user-avatar-caption">Clean, modern profile photo placeholder</figcaption>
+            </figure>
+
+                <section class="profile-card__body" data-testid="test-profile-body">
+                    <p class="profile-card__bio" data-testid="test-user-bio">
+                        I build responsive interfaces with React/NextJS, Node.js, and TypeScript that are easy to use, and scalable.
+                    </p>
+
+
+                    <p class="profile-card__time-label" data-testid="test-user-time-label">Current time (ms)</p>
+                    <time class="profile-card__time" data-testid="test-user-time" aria-live="polite" aria-atomic="true"></time>
+
+
+                    <nav class="profile-card__socials" data-testid="test-user-social-links" aria-label="Jordan Okafor social links">
+                        <a class="profile-card__link" data-testid="test-user-social-github" href="https://github.com/C-J7" target="_blank" rel="noopener noreferrer">GitHub</a>
+                        <a class="profile-card__link" data-testid="test-user-social-linkedin" href="https://www.linkedin.com/in/christian-bamgbose/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                        <a class="profile-card__link" data-testid="test-user-social-twitter" href="https://x.com/" target="_blank" rel="noopener noreferrer">X / Twitter</a>
+                    </nav>
+
+
+                    <section class="profile-card__lists" data-testid="test-user-lists">
+                        <section class="profile-card__list-block" data-testid="test-user-hobbies-section" aria-labelledby="hobbies-title">
+                            <h3 class="profile-card__section-title" id="hobbies-title" data-testid="test-user-hobbies-title">Hobbies</h3>
+                            <ul class="profile-card__list" data-testid="test-user-hobbies">
+                                <li class="profile-card__list-item" data-testid="test-user-hobby-1">Designing Digital systems</li>
+                                <li class="profile-card__list-item" data-testid="test-user-hobby-2">Reading tech blogs</li>
+                                <li class="profile-card__list-item" data-testid="test-user-hobby-3">Competitive Programming</li>
+                            </ul>
+                        </section>
+
+
+                        <section class="profile-card__list-block" data-testid="test-user-dislikes-section" aria-labelledby="dislikes-title">
+                            <h3 class="profile-card__section-title" id="dislikes-title" data-testid="test-user-dislikes-title">Dislikes</h3>
+                            <ul class="profile-card__list" data-testid="test-user-dislikes">
+                                <li class="profile-card__list-item" data-testid="test-user-dislike-1">Unreadable layouts</li>
+                                <li class="profile-card__list-item" data-testid="test-user-dislike-2">Low-contrast and Poor Accessibility</li>
+                                <li class="profile-card__list-item" data-testid="test-user-dislike-3">Ambiguous error messages</li>
+                            </ul>
+                        </section>
+                    </section>
+                </section>
             </article>
         </main>
+
+        <script src="index.js"></script>
     </body>
 </html>
