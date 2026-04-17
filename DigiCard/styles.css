@@ -76,14 +76,14 @@ body::before {
     align-self: start;
     width: fit-content;
     padding: 6px 12px;
-    border-radius: 999px;
+    border-radius: 50px;
     background: rgba(125, 211, 252, 0.12);
     border: 1px solid rgba(125, 211, 252, 0.24);
     color: var(--accent);
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.12em;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
 }
 
 
