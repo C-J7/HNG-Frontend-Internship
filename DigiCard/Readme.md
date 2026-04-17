@@ -29,10 +29,10 @@ This project was built using plain HTML, CSS, and Vanilla JavaScript, hence runn
      ```
      Then navigate to `http://localhost:8000` in your browser.
 
-## 🌐 Deployment Notes
+## Deployment Notes
 This project can be deployed easily using any of the below options:
 
-### Option 1: GitHub Pages (Fastest)
+### Option 1: GitHub Pages
 1. Push your code to a public GitHub repository.
 2. Go to your repository's **Settings** tab.
 3. Select **Pages** from the left sidebar.
@@ -44,6 +44,6 @@ This project can be deployed easily using any of the below options:
 1. Create an account on [Vercel](https://vercel.com/) or [Netlify](https://www.netlify.com/).
 2. Click **Add New Project** / **Add New Site**.
 3. Connect your GitHub account and import this repository.
-4. Leave the build command and output directory empty (or default).
+4. Leave the build command and ensuer the output directory is ".".
 5. Click **Deploy**.
 
