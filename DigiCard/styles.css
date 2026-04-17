@@ -1,4 +1,27 @@
 /* DigiCard Styles*/
+:root {
+    color-scheme: light;
+    --bg: #0b1220;
+    --bg-soft: #111b2e;
+    --card: rgba(15, 23, 42, 0.88);
+    --card-border: rgba(148, 163, 184, 0.22);
+    --text: #edf2ff;
+    --muted: #b5c0da;
+    --accent: #7dd3fc;
+    --accent-strong: #38bdf8;
+    --shadow: 0 24px 70px rgba(15, 23, 42, 0.45);
+    --radius: 24px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+html {
+    min-height: 100%;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;

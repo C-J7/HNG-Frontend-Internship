@@ -1,13 +1,24 @@
-<html>
-    <head>
-        <title>DigiCard</title>
-        <link rel="stylesheet" href="style.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiCard | Digital Profile Card</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
 
     <body>
-        <div class="container">
-            <h1>DigiCard</h1>
-        </div>
+        <main class="page-shell" data-test-id="test-page-shell">
+            <article class="profile-card" data-testid="test-profile-card" aria-label="DigiCard profile card">
+            <div class="profile-card__brand" data-testid="test-brand-label">DigiCard</div>
+
+
+            <header class="profile-card__header" data-testid="test-profile-header">
+                <h2 class="profile-card__name" data-testid="test-user-name">Bamgbose Christian</h2>
+                <p class="profile-card__role" data-testid="test-user-role">Software Engineer · System Analyst · Accessibility-first thinker</p>
+            </header>
+            
+            </article>
+        </main>
     </body>
 </html>
