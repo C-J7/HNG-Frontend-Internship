@@ -19,14 +19,14 @@ const avatarSvg = `
   <circle cx="138" cy="120" r="8" fill="#0f172a" />
   <circle cx="182" cy="120" r="8" fill="#0f172a" />
   <path d="M141 150c12 10 26 10 38 0" fill="none" stroke="#0f172a" stroke-width="8" stroke-linecap="round" />
-  <path d="M112 95c15-22 39-32 48-32s33 10 48 32" fill="none" stroke="#eff6ff" stroke-width="18" stroke-linecap="round" />
+  
 </svg>`;
 
 
 
 
 function updateTime() {
-    currentTime.textContent = String(Date.now());
+    currentTime.textContent = Date.now();
 }
 
 

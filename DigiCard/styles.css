@@ -58,8 +58,8 @@ body::before {
 .profile-card {
     width: min(100%, 980px);
     display: grid;
-    grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
-    gap: 28px;
+    grid-template-columns: 220px minmax(0, 1fr); 
+    gap: 24px;
     padding: 28px;
     border: 1px solid var(--card-border);
     border-radius: var(--radius);
@@ -118,7 +118,7 @@ body::before {
 
 .profile-card__avatar {
     width: 100%;
-    max-width: 320px;
+    max-width: 400px;
     aspect-ratio: 1;
     border-radius: 24px;
     object-fit: cover;
@@ -128,10 +128,20 @@ body::before {
 }
 
 
-.profile-card__caption,
-.profile-card__time-label {
+.profile-card__caption {
     color: var(--muted);
     font-size: 0.94rem;
+}
+
+
+.profile-card__time-label {
+    color: var(--accent-strong);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: -10px;
+    display: block;
 }
 
 
